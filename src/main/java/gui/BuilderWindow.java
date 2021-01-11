@@ -22,6 +22,50 @@ public class BuilderWindow extends JFrame {
 		this.setLayout(null);
 		this.getContentPane().setBackground(Color.WHITE);
 		this.setResizable(false);
+		addImeMenu();
+		
+	}
+	
+	private void addImeMenu() {
+		
+		JPanel jp = new JPanel();
+		
+		jp.setBounds(0, 70, 800, 49);
+		jp.setLayout(null);
+		jp.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
+		
+		this.add(jp);
+		
+		JLabel number = new JLabel("№");
+		number.setName("number");
+		number.setBounds(25, 5, 50, 60);
+		number.setFont(number.getFont().deriveFont(20f));
+		
+		jp.add(number);
+		
+		JLabel nameField = new JLabel("Name and description");
+		
+		nameField.setBounds(number.getX()+number.getWidth(), 20, 250, 30);
+		
+		jp.add(nameField);
+
+		JLabel masureField = new JLabel("Masure");
+		
+		masureField.setBounds(nameField.getX()+nameField.getWidth()+10, 20, 70, 30);
+		
+		jp.add(masureField);
+		
+		JLabel quantityField = new JLabel("Quantity");
+		
+		quantityField.setBounds(masureField.getX()+masureField.getWidth()+10, 20, 120, 30);
+		
+		jp.add(quantityField);
+		
+		JLabel priceForOneField = new JLabel("Price for one");
+		
+		priceForOneField.setBounds(quantityField.getX()+quantityField.getWidth(), 20, 100, 30);
+		
+		jp.add(priceForOneField);
 		
 	}
 	
@@ -29,7 +73,7 @@ public class BuilderWindow extends JFrame {
 		
 		JPanel jp = new JPanel();
 		
-		jp.setBounds(5, 100+71*itemsInfo.size(), 790, 70);
+		jp.setBounds(5, 120+71*itemsInfo.size(), 790, 70);
 		jp.setLayout(null);
 		jp.setBackground(Color.LIGHT_GRAY);
 		jp.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
@@ -82,22 +126,49 @@ public class BuilderWindow extends JFrame {
 		
 		JLabel number = new JLabel(itemsInfo.size()+"");
 		number.setName("number");
-		number.setBounds(10, 10, 60, 60);
+		number.setBounds(25, 5, 50, 60);
+		number.setFont(number.getFont().deriveFont(20f));
 		
 		jp.add(number);
+		
+		JTextField nameField = new JTextField();
+		
+		nameField.setBounds(number.getX()+number.getWidth(), 20, 250, 30);
+		
+		jp.add(nameField);
+
+		JTextField masureField = new JTextField();
+		
+		masureField.setBounds(nameField.getX()+nameField.getWidth()+10, 20, 50, 30);
+		
+		jp.add(masureField);
+		
+		JTextField quantityField = new JTextField();
+		
+		quantityField.setBounds(masureField.getX()+masureField.getWidth()+10, 20, 120, 30);
+		
+		jp.add(quantityField);
+		
+		JTextField priceForOneField = new JTextField();
+		
+		priceForOneField.setBounds(quantityField.getX()+quantityField.getWidth()+10, 20, 80, 30);
+		
+		jp.add(priceForOneField);
 		
 	}
 	
 	private void repaintItemsInfo() {
 		
 		for(int i = 0; i < itemsInfo.size(); i++) {
-			itemsInfo.get(i).setBounds(5, 100+71*i, 790, 70);
-			var l = (JLabel)itemsInfo.get(i).getComponentAt(10, 10);
+			itemsInfo.get(i).setBounds(5, 120+71*i, 790, 70);
+			var l = (JLabel)itemsInfo.get(i).getComponentAt(25, 5);
 			l.setText((i+1)+"");
 		}
 		
 		repaint();
 		
 	}
+	
+	
 
 }
