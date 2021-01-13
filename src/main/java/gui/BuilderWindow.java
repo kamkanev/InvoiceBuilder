@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.swing.*;
 
+import Models.Item;
+
 public class BuilderWindow extends JFrame {
 	
 	private List<JPanel> itemsInfo;
@@ -82,6 +84,7 @@ public class BuilderWindow extends JFrame {
 		this.add(jp);
 		
 		JButton delButt = new JButton("Del");
+		delButt.setName("Del");
 		delButt.setBounds(735, 10, 50, 50);
 		delButt.setBackground(Color.RED);
 		delButt.setFocusable(false);
@@ -134,24 +137,28 @@ public class BuilderWindow extends JFrame {
 		JTextField nameField = new JTextField();
 		
 		nameField.setBounds(number.getX()+number.getWidth(), 20, 250, 30);
+		nameField.setName("nameField");
 		
 		jp.add(nameField);
 
 		JTextField masureField = new JTextField();
 		
 		masureField.setBounds(nameField.getX()+nameField.getWidth()+10, 20, 50, 30);
+		masureField.setName("masureField");
 		
 		jp.add(masureField);
 		
 		JTextField quantityField = new JTextField();
 		
 		quantityField.setBounds(masureField.getX()+masureField.getWidth()+10, 20, 120, 30);
+		quantityField.setName("quantityField");
 		
 		jp.add(quantityField);
 		
 		JTextField priceForOneField = new JTextField();
 		
 		priceForOneField.setBounds(quantityField.getX()+quantityField.getWidth()+10, 20, 80, 30);
+		priceForOneField.setName("priceForOneField");
 		
 		jp.add(priceForOneField);
 		
@@ -166,6 +173,43 @@ public class BuilderWindow extends JFrame {
 		}
 		
 		repaint();
+		
+	}
+	
+	public List<Item> generateItemsUsingGui(){
+		
+		List<Item> items = new ArrayList<Item>();
+		
+		for(JPanel jp : this.itemsInfo) {
+			
+			List<String> values = new ArrayList<String>();
+			
+			for(int i = 0; i < jp.getComponentCount(); i++) {
+				
+				if(jp.getComponent(i).getName().equals("Del") || jp.getComponent(i).getName().equals("number"))
+					continue;
+					
+				
+				var el = (JTextField)jp.getComponent(i);
+				
+//				System.out.println(el.getName() + " " + el.getText());
+				
+				values.add(el.getText());
+				
+			}
+			
+			items.add(this.createItemUsingStrings(values));
+			
+//			System.out.println("-------------------");
+		}
+		
+		return items;
+		
+	}
+	
+	private Item createItemUsingStrings(List<String> value){
+		
+		return new Item(value.get(0), value.get(1), Double.parseDouble(value.get(2)), Double.parseDouble(value.get(3)));
 		
 	}
 	

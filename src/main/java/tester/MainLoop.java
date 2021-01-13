@@ -36,7 +36,7 @@ public class MainLoop {
 		
 		win.setVisible(true);
 		
-		final JButton jb = new JButton("Create");
+		JButton jb = new JButton("Create");
 		
 		jb.setBounds(0, 0, 100, 60);
 		
@@ -52,6 +52,34 @@ public class MainLoop {
 			}
 		});
 		
+		JButton save = new JButton("Save");
+		
+		save.setBounds(110, 0, 100, 60);
+		
+		save.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				List<Item> items = win.generateItemsUsingGui();
+				double prozent = 20;
+				
+				Content content = new Content(items, prozent);
+				
+				System.out.println(content);
+				System.out.println("base sum : " + content.getSummaryWithOutVat());
+		
+				System.out.println("vat "+ prozent +"% summary : " + content.getVatSummary());
+		
+				System.out.println("overall sum : " + content.getSummaryWithVat());
+				
+				
+				win.repaint();
+				
+			}
+		});
+		
+		win.add(save);
 		win.add(jb);
 
 	}
