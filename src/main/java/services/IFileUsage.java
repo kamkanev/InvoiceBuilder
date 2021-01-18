@@ -1,6 +1,6 @@
 package services;
 
-public interface FileUsage {
+public interface IFileUsage {
 	
 	public void createDocumnet(String name);
 	

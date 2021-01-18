@@ -209,7 +209,9 @@ public class BuilderWindow extends JFrame {
 	
 	private Item createItemUsingStrings(List<String> value){
 		
+		
 		return new Item(value.get(0), value.get(1), Double.parseDouble(value.get(2)), Double.parseDouble(value.get(3)));
+			
 		
 	}
 	

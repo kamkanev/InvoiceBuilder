@@ -4,14 +4,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 
 import Models.Content;
 import Models.Item;
+import Models.Consts.Info;
 import gui.BuilderWindow;
+import gui.SetupWindow;
 
 public class MainLoop {
 
@@ -32,55 +36,73 @@ public class MainLoop {
 //
 //		System.out.println("overall sum : " + content.getSummaryWithVat());
 		
-		BuilderWindow win = new BuilderWindow();
+		//setup window
 		
-		win.setVisible(true);
+		File infoFile = new File(Info.getResDirectory()+"/.info/info.txt");
 		
-		JButton jb = new JButton("Create");
-		
-		jb.setBounds(0, 0, 100, 60);
-		
-		jb.addActionListener(new ActionListener() {
+		if(!infoFile.exists()) {
+			SetupWindow sWin = new SetupWindow();
 			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				win.createNewItemTag();
-				win.repaint();
-				
-				
-				
-			}
-		});
+			sWin.setVisible(true);
+		}
 		
-		JButton save = new JButton("Save");
 		
-		save.setBounds(110, 0, 100, 60);
-		
-		save.addActionListener(new ActionListener() {
+
+		if(infoFile.exists()){
+			//builder window
 			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			BuilderWindow win = new BuilderWindow();
+			
+			win.setVisible(true);
+			
+			JButton jb = new JButton("Create");
+			
+			jb.setBounds(0, 0, 100, 60);
+			
+			jb.addActionListener(new ActionListener() {
 				
-				List<Item> items = win.generateItemsUsingGui();
-				double prozent = 20;
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					win.createNewItemTag();
+					win.repaint();
+					
+					
+					
+				}
+			});
+			
+			JButton save = new JButton("Save");
+			
+			save.setBounds(110, 0, 100, 60);
+			
+			save.addActionListener(new ActionListener() {
 				
-				Content content = new Content(items, prozent);
-				
-				System.out.println(content);
-				System.out.println("base sum : " + content.getSummaryWithOutVat());
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					
+					List<Item> items = win.generateItemsUsingGui();
+					double prozent = 20;
+					
+					Content content = new Content(items, prozent);
+					
+					System.out.println(content);
+					System.out.println("base sum : " + content.getSummaryWithOutVat());
+			
+					System.out.println("vat "+ prozent +"% summary : " + content.getVatSummary());
+			
+					System.out.println("overall sum : " + content.getSummaryWithVat());
+					
+					
+					win.repaint();
+					
+				}
+			});
+			
+			win.add(save);
+			win.add(jb);
+		}
+
 		
-				System.out.println("vat "+ prozent +"% summary : " + content.getVatSummary());
-		
-				System.out.println("overall sum : " + content.getSummaryWithVat());
-				
-				
-				win.repaint();
-				
-			}
-		});
-		
-		win.add(save);
-		win.add(jb);
 
 	}
 
