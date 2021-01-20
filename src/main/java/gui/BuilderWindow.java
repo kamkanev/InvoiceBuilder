@@ -2,6 +2,8 @@ package gui;
 
 import java.awt.Color;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -9,6 +11,7 @@ import java.util.List;
 
 import javax.swing.*;
 
+import Models.Content;
 import Models.Item;
 
 public class BuilderWindow extends JFrame {
@@ -24,8 +27,61 @@ public class BuilderWindow extends JFrame {
 		this.setLayout(null);
 		this.getContentPane().setBackground(Color.WHITE);
 		this.setResizable(false);
+		addButtons();
 		addImeMenu();
+		this.setVisible(true);
 		
+	}
+	
+	private void addButtons() {
+		
+		var win = this;
+		
+		JButton jb = new JButton("Create");
+		
+		jb.setBounds(0, 0, 100, 60);
+		
+		jb.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				win.createNewItemTag();
+				win.repaint();
+				
+				
+				
+			}
+		});
+		
+		JButton save = new JButton("Save");
+		
+		save.setBounds(110, 0, 100, 60);
+		
+		save.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				List<Item> items = win.generateItemsUsingGui();
+				double prozent = 20;
+				
+				Content content = new Content(items, prozent);
+				
+				System.out.println(content);
+				System.out.println("base sum : " + content.getSummaryWithOutVat());
+		
+				System.out.println("vat "+ prozent +"% summary : " + content.getVatSummary());
+		
+				System.out.println("overall sum : " + content.getSummaryWithVat());
+				
+				
+				win.repaint();
+				
+			}
+		});
+		
+		win.add(save);
+		win.add(jb);
 	}
 	
 	private void addImeMenu() {

@@ -145,9 +145,19 @@ public class SetupWindow extends JFrame implements IFileUsage{
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				createDocumnet("info");
-				win.repaint();
-				win.dispose();
+				
+				if(Info.getSavingDirectory() == Info.getResDirectory()) {
+					
+					JOptionPane.showMessageDialog(win, "Choose a directory", "Error", JOptionPane.ERROR_MESSAGE);
+					//System.exit(-1);
+				}else {
+					createDocumnet("info");
+					win.repaint();
+					win.dispose();
+					BuilderWindow inWin = new BuilderWindow();
+				}
+				
+				
 				
 			}
 		});

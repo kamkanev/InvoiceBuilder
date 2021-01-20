@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,66 +41,16 @@ public class MainLoop {
 		
 		File infoFile = new File(Info.getResDirectory()+"/.info/info.txt");
 		
+		System.out.println(infoFile.exists());
+		
 		if(!infoFile.exists()) {
 			SetupWindow sWin = new SetupWindow();
 			
 			sWin.setVisible(true);
-		}
-		
-		
-
-		if(infoFile.exists()){
-			//builder window
 			
+//			main(args);
+		}else {
 			BuilderWindow win = new BuilderWindow();
-			
-			win.setVisible(true);
-			
-			JButton jb = new JButton("Create");
-			
-			jb.setBounds(0, 0, 100, 60);
-			
-			jb.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					win.createNewItemTag();
-					win.repaint();
-					
-					
-					
-				}
-			});
-			
-			JButton save = new JButton("Save");
-			
-			save.setBounds(110, 0, 100, 60);
-			
-			save.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					
-					List<Item> items = win.generateItemsUsingGui();
-					double prozent = 20;
-					
-					Content content = new Content(items, prozent);
-					
-					System.out.println(content);
-					System.out.println("base sum : " + content.getSummaryWithOutVat());
-			
-					System.out.println("vat "+ prozent +"% summary : " + content.getVatSummary());
-			
-					System.out.println("overall sum : " + content.getSummaryWithVat());
-					
-					
-					win.repaint();
-					
-				}
-			});
-			
-			win.add(save);
-			win.add(jb);
 		}
 
 		
