@@ -1,6 +1,8 @@
 package gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +19,7 @@ import Models.Item;
 public class BuilderWindow extends JFrame {
 	
 	private List<JPanel> itemsInfo;
+	private JScrollPane itemsView = null;
 	
 	public BuilderWindow() {
 		super("Invoice Builder");
@@ -131,17 +134,18 @@ public class BuilderWindow extends JFrame {
 		
 		JPanel jp = new JPanel();
 		
-		jp.setBounds(5, 120+71*itemsInfo.size(), 790, 70);
+		jp.setBounds(0, 0+71*itemsInfo.size(), 780, 70);
 		jp.setLayout(null);
 		jp.setBackground(Color.LIGHT_GRAY);
 		jp.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
 		
 		itemsInfo.add(jp);
-		this.add(jp);
+		//this.add(jp);
+		
 		
 		JButton delButt = new JButton("Del");
 		delButt.setName("Del");
-		delButt.setBounds(735, 10, 50, 50);
+		delButt.setBounds(725, 10, 50, 50);
 		delButt.setBackground(Color.RED);
 		delButt.setFocusable(false);
 		delButt.setVisible(false);
@@ -161,7 +165,8 @@ public class BuilderWindow extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				super.mouseClicked(e);
 				itemsInfo.remove(jp);
-				remove(jp);
+				JPanel contnWin = (JPanel) itemsView.getViewport().getComponent(0);
+				contnWin.remove(jp);
 				repaintItemsInfo();
 			}
 			
@@ -218,12 +223,43 @@ public class BuilderWindow extends JFrame {
 		
 		jp.add(priceForOneField);
 		
+		if(itemsView == null) {
+			JPanel panel = new JPanel(new BorderLayout());
+			panel.setBounds(0, 0, 800, 400);
+			//panel.setPreferredSize(new Dimension(780, 400));
+			panel.setLayout(null);
+			
+			panel.add(jp);
+			
+			itemsView = new JScrollPane(panel);
+			itemsView.createVerticalScrollBar();
+			itemsView.setBounds(0, 120, 800, 400);
+			itemsView.setFocusable(true);
+			
+		}else {
+			
+			JPanel panel = (JPanel) itemsView.getViewport().getComponent(0);
+			panel.setPreferredSize(new Dimension(780, itemsInfo.size()*71));
+			
+			panel.add(jp);
+			
+			this.remove(itemsView);
+			
+			itemsView = new JScrollPane(panel);
+			itemsView.setBounds(0, 120, 800, 400);
+			itemsView.setFocusable(true);
+
+		}
+		this.add(itemsView);
+		this.validate();
+		this.repaint();
+		
 	}
 	
 	private void repaintItemsInfo() {
 		
 		for(int i = 0; i < itemsInfo.size(); i++) {
-			itemsInfo.get(i).setBounds(5, 120+71*i, 790, 70);
+			itemsInfo.get(i).setBounds(0, 0+71*i, 790, 70);
 			var l = (JLabel)itemsInfo.get(i).getComponentAt(25, 5);
 			l.setText((i+1)+"");
 		}
