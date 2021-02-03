@@ -20,6 +20,7 @@ public class BuilderWindow extends JFrame {
 	
 	private List<JPanel> itemsInfo;
 	private JScrollPane itemsView = null;
+	private JPanel receiverInfo;
 	
 	public BuilderWindow() {
 		super("Invoice Builder");
@@ -30,9 +31,60 @@ public class BuilderWindow extends JFrame {
 		this.setLayout(null);
 		this.getContentPane().setBackground(Color.WHITE);
 		this.setResizable(false);
+		addReceiverInfo();
 		addButtons();
 		addImeMenu();
 		this.setVisible(true);
+		
+	}
+	
+	private void addReceiverInfo() {
+		
+		receiverInfo = new JPanel();
+		
+		receiverInfo.setBounds(10, 10, 300, 150);
+		
+		receiverInfo.setLayout(null);
+		receiverInfo.setBorder(BorderFactory.createEtchedBorder(1));
+		
+		JTextField nameField = new JTextField();
+		
+		nameField.setBounds(10, 5, 100, 20);
+		nameField.setName("nameField");
+		
+		receiverInfo.add(nameField);
+
+		JTextField addressField = new JTextField();
+		
+		addressField.setBounds(10, nameField.getY()+nameField.getHeight()+10, 100, 20);
+		addressField.setName("addressField");
+		
+		receiverInfo.add(addressField);
+		
+		JTextField eikField = new JTextField();
+		
+		eikField.setBounds(10, addressField.getY()+addressField.getHeight()+10, 100, 20);
+		eikField.setName("eikField");
+		
+		receiverInfo.add(eikField);
+		
+		JTextField vatField = new JTextField();
+		
+		vatField.setBounds(10, eikField.getY()+eikField.getHeight()+10, 100, 20);
+		vatField.setName("vatField");
+		
+		receiverInfo.add(vatField);
+		
+		JTextField molField = new JTextField();
+		
+		molField.setBounds(10, vatField.getY()+vatField.getHeight()+10, 100, 20);
+		molField.setName("molField");
+		
+		receiverInfo.add(molField);
+		
+
+		
+		this.add(receiverInfo);
 		
 	}
 	
@@ -40,25 +92,12 @@ public class BuilderWindow extends JFrame {
 		
 		var win = this;
 		
-		JButton jb = new JButton("Create");
-		
-		jb.setBounds(0, 0, 100, 60);
-		
-		jb.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				win.createNewItemTag();
-				win.repaint();
-				
-				
-				
-			}
-		});
 		
 		JButton save = new JButton("Save");
 		
-		save.setBounds(110, 0, 100, 60);
+		save.setBounds(110, 500, 100, 60);
+		
+		save.setFocusable(false);
 		
 		save.addActionListener(new ActionListener() {
 			
@@ -84,14 +123,13 @@ public class BuilderWindow extends JFrame {
 		});
 		
 		win.add(save);
-		win.add(jb);
 	}
 	
 	private void addImeMenu() {
 		
 		JPanel jp = new JPanel();
 		
-		jp.setBounds(0, 70, 800, 49);
+		jp.setBounds(0, 170, 800, 49);
 		jp.setLayout(null);
 		jp.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
 		
@@ -127,6 +165,32 @@ public class BuilderWindow extends JFrame {
 		priceForOneField.setBounds(quantityField.getX()+quantityField.getWidth(), 20, 100, 30);
 		
 		jp.add(priceForOneField);
+		
+		var win = this;
+		
+		JButton jb = new JButton("+");
+		
+		jb.setBounds(jp.getWidth()-40, 10, 30, 30);
+		
+		jb.setFont(jb.getFont().deriveFont(15f));
+		jb.setFocusable(false);
+		jb.setBackground(Color.GREEN);
+		
+		jb.setMargin(new Insets(0,0,0,0));
+		
+		jb.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				win.createNewItemTag();
+				win.repaint();
+				
+				
+				
+			}
+		});
+		
+		jp.add(jb);
 		
 	}
 	
@@ -225,7 +289,7 @@ public class BuilderWindow extends JFrame {
 		
 		if(itemsView == null) {
 			JPanel panel = new JPanel(new BorderLayout());
-			panel.setBounds(0, 0, 800, 400);
+			panel.setBounds(0, 0, 780, 300);
 			//panel.setPreferredSize(new Dimension(780, 400));
 			panel.setLayout(null);
 			
@@ -233,7 +297,7 @@ public class BuilderWindow extends JFrame {
 			
 			itemsView = new JScrollPane(panel);
 			itemsView.createVerticalScrollBar();
-			itemsView.setBounds(0, 120, 800, 400);
+			itemsView.setBounds(0, 220, 800, 250);
 			itemsView.setFocusable(true);
 			
 		}else {
@@ -246,7 +310,7 @@ public class BuilderWindow extends JFrame {
 			this.remove(itemsView);
 			
 			itemsView = new JScrollPane(panel);
-			itemsView.setBounds(0, 120, 800, 400);
+			itemsView.setBounds(0, 220, 800, 250);
 			itemsView.setFocusable(true);
 
 		}
