@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ public class BuilderWindow extends JFrame {
 	private List<JPanel> itemsInfo;
 	private JScrollPane itemsView = null;
 	private JPanel receiverInfo;
+	private JTextField vatProzentGL;
 	
 	public BuilderWindow() {
 		super("Invoice Builder");
@@ -34,6 +37,7 @@ public class BuilderWindow extends JFrame {
 		addReceiverInfo();
 		addButtons();
 		addImeMenu();
+		addVatProzentFields();
 		this.setVisible(true);
 		
 	}
@@ -42,49 +46,122 @@ public class BuilderWindow extends JFrame {
 		
 		receiverInfo = new JPanel();
 		
-		receiverInfo.setBounds(10, 10, 300, 150);
+		receiverInfo.setBounds(110, 10, 170, 150);
 		
 		receiverInfo.setLayout(null);
 		receiverInfo.setBorder(BorderFactory.createEtchedBorder(1));
 		
 		JTextField nameField = new JTextField();
 		
-		nameField.setBounds(10, 5, 100, 20);
+		nameField.setBounds(10, 5, 150, 20);
 		nameField.setName("nameField");
 		
 		receiverInfo.add(nameField);
 
 		JTextField addressField = new JTextField();
 		
-		addressField.setBounds(10, nameField.getY()+nameField.getHeight()+10, 100, 20);
+		addressField.setBounds(10, nameField.getY()+nameField.getHeight()+10, 150, 20);
 		addressField.setName("addressField");
 		
 		receiverInfo.add(addressField);
 		
 		JTextField eikField = new JTextField();
 		
-		eikField.setBounds(10, addressField.getY()+addressField.getHeight()+10, 100, 20);
+		eikField.setBounds(10, addressField.getY()+addressField.getHeight()+10, 150, 20);
 		eikField.setName("eikField");
 		
 		receiverInfo.add(eikField);
 		
 		JTextField vatField = new JTextField();
 		
-		vatField.setBounds(10, eikField.getY()+eikField.getHeight()+10, 100, 20);
+		vatField.setBounds(10, eikField.getY()+eikField.getHeight()+10, 150, 20);
 		vatField.setName("vatField");
 		
 		receiverInfo.add(vatField);
 		
 		JTextField molField = new JTextField();
 		
-		molField.setBounds(10, vatField.getY()+vatField.getHeight()+10, 100, 20);
+		molField.setBounds(10, vatField.getY()+vatField.getHeight()+10, 150, 20);
 		molField.setName("molField");
 		
 		receiverInfo.add(molField);
 		
-
+		addJLabelsToRec();
 		
 		this.add(receiverInfo);
+		
+	}
+	
+	private void addJLabelsToRec() {
+		
+		JPanel receiverLabels = new JPanel();
+		
+		receiverLabels.setBounds(10, 10, 100, 150);
+		
+		receiverLabels.setLayout(null);
+		receiverLabels.setBorder(BorderFactory.createEtchedBorder(1));
+		
+		JLabel nameField = new JLabel("Name:");
+		
+		nameField.setBounds(10, 5, 150, 20);
+		
+		receiverLabels.add(nameField);
+
+		JLabel addressField = new JLabel("Adress:");
+		
+		addressField.setBounds(10, nameField.getY()+nameField.getHeight()+10, 150, 20);
+		
+		receiverLabels.add(addressField);
+		
+		JLabel eikField = new JLabel("EIK:");
+		
+		eikField.setBounds(10, addressField.getY()+addressField.getHeight()+10, 150, 20);
+		
+		receiverLabels.add(eikField);
+		
+		JLabel vatField = new JLabel("VAT:");
+		
+		vatField.setBounds(10, eikField.getY()+eikField.getHeight()+10, 150, 20);
+		
+		receiverLabels.add(vatField);
+		
+		JLabel molField = new JLabel("MOL:");
+		
+		molField.setBounds(10, vatField.getY()+vatField.getHeight()+10, 150, 20);
+		
+		receiverLabels.add(molField);
+		
+		this.add(receiverLabels);
+		
+	}
+	
+	private void addVatProzentFields() {
+		
+		JPanel vatPan = new JPanel();
+		
+		vatPan.setBounds(600, 470, 200, 30);
+		vatPan.setName("vatPan");
+		
+		vatPan.setLayout(null);
+		vatPan.setBorder(BorderFactory.createEtchedBorder(1));
+		
+		JLabel nameField = new JLabel("VAT Prozent:");
+		
+		nameField.setBounds(10, 5, 100, 20);
+		
+		vatPan.add(nameField);
+		
+		JTextField vatField = new JTextField();
+		
+		vatField.setBounds(120, 5, 50, 20);
+		vatField.setName("vatPrField");
+		vatField.setText("20");
+		
+		vatProzentGL = vatField;
+		
+		vatPan.add(vatField);
+		
+		add(vatPan);
 		
 	}
 	
@@ -105,7 +182,7 @@ public class BuilderWindow extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				List<Item> items = win.generateItemsUsingGui();
-				double prozent = 20;
+				double prozent = Double.parseDouble((vatProzentGL.getText().length()<=0) ? "0" : vatProzentGL.getText());
 				
 				Content content = new Content(items, prozent);
 				

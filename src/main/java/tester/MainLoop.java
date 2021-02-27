@@ -40,6 +40,7 @@ public class MainLoop {
 		
 		//setup window
 		
+		
 		File infoFile = new File(Info.getResDirectory()+"/.info/info.txt");
 		
 		System.out.println(infoFile.exists());
