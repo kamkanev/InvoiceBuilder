@@ -49,5 +49,24 @@ public class Receiver {
 		this.vat = vat;
 	}
 	
+	@Override
+	public String toString() {
+		String str = "";
+		
+		str+= this.name;
+		str += "\n";
+		str+= this.receiverName;
+		str += "\n";
+		str+= this.address;
+		str += "\n"+this.eik;
+		str += "\n";
+		str += this.vat;
+		str += "\n";
+		str += this.mol;
+		str += "\n";
+		
+		return str;
+	}
+	
 
 }

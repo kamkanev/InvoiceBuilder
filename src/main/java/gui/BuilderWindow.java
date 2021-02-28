@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -10,13 +11,24 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Properties;
 
 import javax.swing.*;
 
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
+
 import Models.Content;
+import Models.DateLabelFormatter;
 import Models.Item;
+import Models.Receiver;
 
 public class BuilderWindow extends JFrame {
 	
@@ -38,6 +50,7 @@ public class BuilderWindow extends JFrame {
 		addButtons();
 		addImeMenu();
 		addVatProzentFields();
+		addInvoiceInfo();
 		this.setVisible(true);
 		
 	}
@@ -46,7 +59,7 @@ public class BuilderWindow extends JFrame {
 		
 		receiverInfo = new JPanel();
 		
-		receiverInfo.setBounds(110, 10, 170, 150);
+		receiverInfo.setBounds(110, 5, 170, 160);
 		
 		receiverInfo.setLayout(null);
 		receiverInfo.setBorder(BorderFactory.createEtchedBorder(1));
@@ -57,24 +70,31 @@ public class BuilderWindow extends JFrame {
 		nameField.setName("nameField");
 		
 		receiverInfo.add(nameField);
+		
+		JTextField receiverNameField = new JTextField();
+		
+		receiverNameField.setBounds(10, nameField.getY()+nameField.getHeight()+5, 150, 20);
+		receiverNameField.setName("receiverNameField");
+		
+		receiverInfo.add(receiverNameField);
 
 		JTextField addressField = new JTextField();
 		
-		addressField.setBounds(10, nameField.getY()+nameField.getHeight()+10, 150, 20);
+		addressField.setBounds(10, receiverNameField.getY()+receiverNameField.getHeight()+5, 150, 20);
 		addressField.setName("addressField");
 		
 		receiverInfo.add(addressField);
 		
 		JTextField eikField = new JTextField();
 		
-		eikField.setBounds(10, addressField.getY()+addressField.getHeight()+10, 150, 20);
+		eikField.setBounds(10, addressField.getY()+addressField.getHeight()+5, 150, 20);
 		eikField.setName("eikField");
 		
 		receiverInfo.add(eikField);
 		
 		JTextField vatField = new JTextField();
 		
-		vatField.setBounds(10, eikField.getY()+eikField.getHeight()+10, 150, 20);
+		vatField.setBounds(10, eikField.getY()+eikField.getHeight()+5, 150, 20);
 		vatField.setName("vatField");
 		
 		receiverInfo.add(vatField);
@@ -96,7 +116,7 @@ public class BuilderWindow extends JFrame {
 		
 		JPanel receiverLabels = new JPanel();
 		
-		receiverLabels.setBounds(10, 10, 100, 150);
+		receiverLabels.setBounds(10, 5, 100, 160);
 		
 		receiverLabels.setLayout(null);
 		receiverLabels.setBorder(BorderFactory.createEtchedBorder(1));
@@ -106,22 +126,28 @@ public class BuilderWindow extends JFrame {
 		nameField.setBounds(10, 5, 150, 20);
 		
 		receiverLabels.add(nameField);
+		
+		JLabel recieverNameField = new JLabel("Buyer name:");
+		
+		recieverNameField.setBounds(5, nameField.getY()+nameField.getHeight()+5, 150, 20);
+		
+		receiverLabels.add(recieverNameField);
 
 		JLabel addressField = new JLabel("Adress:");
 		
-		addressField.setBounds(10, nameField.getY()+nameField.getHeight()+10, 150, 20);
+		addressField.setBounds(10, recieverNameField.getY()+recieverNameField.getHeight()+5, 150, 20);
 		
 		receiverLabels.add(addressField);
 		
 		JLabel eikField = new JLabel("EIK:");
 		
-		eikField.setBounds(10, addressField.getY()+addressField.getHeight()+10, 150, 20);
+		eikField.setBounds(10, addressField.getY()+addressField.getHeight()+5, 150, 20);
 		
 		receiverLabels.add(eikField);
 		
 		JLabel vatField = new JLabel("VAT:");
 		
-		vatField.setBounds(10, eikField.getY()+eikField.getHeight()+10, 150, 20);
+		vatField.setBounds(10, eikField.getY()+eikField.getHeight()+5, 150, 20);
 		
 		receiverLabels.add(vatField);
 		
@@ -132,6 +158,27 @@ public class BuilderWindow extends JFrame {
 		receiverLabels.add(molField);
 		
 		this.add(receiverLabels);
+		
+	}
+	
+	private void addInvoiceInfo() {
+
+		Properties p = new Properties();
+		p.put("text.today", "Today");
+		p.put("text.month", "Month");
+		p.put("text.year", "Year");
+		
+		UtilDateModel model = new UtilDateModel();
+		
+		model.setDate(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+		model.setSelected(true);
+		
+		JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+		
+		datePicker.setBounds(300, 10, 150, 50);
+		 
+		this.add(datePicker);
 		
 	}
 	
@@ -183,6 +230,10 @@ public class BuilderWindow extends JFrame {
 				
 				List<Item> items = win.generateItemsUsingGui();
 				double prozent = Double.parseDouble((vatProzentGL.getText().length()<=0) ? "0" : vatProzentGL.getText());
+				
+				Receiver receiver = generateReceiverUsingGui();
+				
+				System.out.println(receiver);
 				
 				Content content = new Content(items, prozent);
 				
@@ -437,6 +488,52 @@ public class BuilderWindow extends JFrame {
 		}
 		
 		return items;
+		
+	}
+	
+	public Receiver generateReceiverUsingGui() {
+		
+		String name = "", address = "", eik = "", vat = "", mol = "", receiverName = "";
+		
+		for(Component jc : this.receiverInfo.getComponents()) {
+			
+			
+			
+			switch (jc.getName()) {
+			case "nameField":
+				JTextField jt = (JTextField) jc;
+				name = jt.getText();
+				break;
+			case "addressField":
+				JTextField jt1 = (JTextField) jc;
+				address = jt1.getText();
+				break;
+			case "eikField":
+				JTextField je = (JTextField) jc;
+				eik = je.getText();
+				break;
+			case "vatField":
+				JTextField jt2 = (JTextField) jc;
+				vat = jt2.getText();
+				break;
+			case "molField":
+				JTextField jt3 = (JTextField) jc;
+				mol = jt3.getText();
+				break;
+			case "receiverNameField":
+				JTextField jt4 = (JTextField) jc;
+				receiverName = jt4.getText();
+				break;
+			default:
+				break;
+			}
+			
+			
+			
+		}
+		
+		return new Receiver(name, address, Integer.parseInt(eik), mol, receiverName, vat);
+		
 		
 	}
 	
