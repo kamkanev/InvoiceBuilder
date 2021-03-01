@@ -27,6 +27,7 @@ import org.jdatepicker.impl.UtilDateModel;
 
 import Models.Content;
 import Models.DateLabelFormatter;
+import Models.Invoice;
 import Models.Item;
 import Models.Receiver;
 
@@ -36,6 +37,11 @@ public class BuilderWindow extends JFrame {
 	private JScrollPane itemsView = null;
 	private JPanel receiverInfo;
 	private JTextField vatProzentGL;
+	private UtilDateModel model;
+	private JTextField invoiceIdInfo;
+	private JTextField placeInfo;
+	private JRadioButton cashPay;
+	private JRadioButton bankPay;
 	
 	public BuilderWindow() {
 		super("Invoice Builder");
@@ -51,6 +57,7 @@ public class BuilderWindow extends JFrame {
 		addImeMenu();
 		addVatProzentFields();
 		addInvoiceInfo();
+		addPaymentChoosing();
 		this.setVisible(true);
 		
 	}
@@ -168,7 +175,7 @@ public class BuilderWindow extends JFrame {
 		p.put("text.month", "Month");
 		p.put("text.year", "Year");
 		
-		UtilDateModel model = new UtilDateModel();
+		model = new UtilDateModel();
 		
 		model.setDate(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
 		model.setSelected(true);
@@ -176,9 +183,36 @@ public class BuilderWindow extends JFrame {
 		JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
 		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
 		
-		datePicker.setBounds(300, 10, 150, 50);
+		JLabel dateLabel = new JLabel("Date:");
+		
+		dateLabel.setBounds(300, 140, 80, 25);
+		
+		datePicker.setBounds(370, 140, 120, 25);
 		 
+		this.add(dateLabel);
 		this.add(datePicker);
+		
+		JLabel numberLabel = new JLabel("Number:");
+		
+		numberLabel.setBounds(300, 10, 80, 25);
+		
+		invoiceIdInfo = new JTextField();
+		
+		invoiceIdInfo.setBounds(370, numberLabel.getY(), 300, numberLabel.getHeight());
+		
+		this.add(numberLabel);
+		this.add(invoiceIdInfo);
+		
+		JLabel placeLabel = new JLabel("Place:");
+		
+		placeLabel.setBounds(300, 45, 80, 25);
+		
+		placeInfo = new JTextField();
+		
+		placeInfo.setBounds(370, placeLabel.getY(), 150, placeLabel.getHeight());
+		
+		this.add(placeLabel);
+		this.add(placeInfo);
 		
 	}
 	
@@ -212,6 +246,52 @@ public class BuilderWindow extends JFrame {
 		
 	}
 	
+	private void addPaymentChoosing() {
+		
+		JPanel paymentPanel = new JPanel();
+		
+		paymentPanel.setBounds(350, 470, 250, 30);
+		paymentPanel.setName("paymentPanel");
+		
+		paymentPanel.setLayout(null);
+		paymentPanel.setBorder(BorderFactory.createEtchedBorder(1));
+		
+		JLabel nameField = new JLabel("Choose payment:");
+		
+		nameField.setBounds(10, 5, 130, 20);
+		
+		paymentPanel.add(nameField);
+		
+		 bankPay = new JRadioButton("Bank");
+		
+		//JTextField vatField = new JTextField();
+		
+		bankPay.setBounds(133, 5, 60, 20);
+		bankPay.setName("bankPay");
+		
+		//vatProzentGL = vatField;
+		
+		paymentPanel.add(bankPay);
+		
+		cashPay = new JRadioButton("Cash");
+		
+		//JTextField vatField = new JTextField();
+		
+		cashPay.setBounds(190, 5, 60, 20);
+		cashPay.setName("cashPay");
+		cashPay.setSelected(true);
+		
+		paymentPanel.add(cashPay);
+		
+		ButtonGroup jgr = new ButtonGroup();
+		
+		jgr.add(bankPay);
+		jgr.add(cashPay);
+		
+		add(paymentPanel);
+		
+	}
+	
 	private void addButtons() {
 		
 		var win = this;
@@ -219,7 +299,7 @@ public class BuilderWindow extends JFrame {
 		
 		JButton save = new JButton("Save");
 		
-		save.setBounds(110, 500, 100, 60);
+		save.setBounds(10, 500, 100, 60);
 		
 		save.setFocusable(false);
 		
@@ -228,16 +308,26 @@ public class BuilderWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
+				String payment = "cash";
+				
+				if(cashPay.isSelected()) {
+					payment ="cash";
+				}else {
+					payment ="bank";
+				}
+				
 				List<Item> items = win.generateItemsUsingGui();
 				double prozent = Double.parseDouble((vatProzentGL.getText().length()<=0) ? "0" : vatProzentGL.getText());
 				
 				Receiver receiver = generateReceiverUsingGui();
 				
-				System.out.println(receiver);
 				
 				Content content = new Content(items, prozent);
 				
-				System.out.println(content);
+				Invoice invoice = new Invoice(invoiceIdInfo.getText(), model.getValue(), model.getValue(), placeInfo.getText(), receiver, content, payment);
+				
+				System.out.println(invoice);
+				
 				System.out.println("base sum : " + content.getSummaryWithOutVat());
 		
 				System.out.println("vat "+ prozent +"% summary : " + content.getVatSummary());

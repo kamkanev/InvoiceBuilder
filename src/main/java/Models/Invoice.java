@@ -1,15 +1,14 @@
 package Models;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 public class Invoice {
 	
 	private String number;
-	private LocalDate date;
-	private LocalDate taxDate;
+	private Date date;
+	private Date taxDate;
 	private String place;
-	
-	private Seller seller;
 	private Receiver receiver;
 	
 	private Content content;
@@ -17,13 +16,12 @@ public class Invoice {
 	private String paymentType;
 	
 
-	public Invoice(String number, LocalDate date, LocalDate taxDate, String place, Seller seller, Receiver receiver,
+	public Invoice(String number, Date date, Date taxDate, String place, Receiver receiver,
 			Content content, String paymentType) {
 		this.number = number;
 		this.date = date;
 		this.taxDate = taxDate;
 		this.place = place;
-		this.seller = seller;
 		this.receiver = receiver;
 		this.content = content;
 		this.paymentType = paymentType;
@@ -33,20 +31,16 @@ public class Invoice {
 		return number;
 	}
 
-	public LocalDate getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public LocalDate getTaxDate() {
+	public Date getTaxDate() {
 		return taxDate;
 	}
 
 	public String getPlace() {
 		return place;
-	}
-
-	public Seller getSeller() {
-		return seller;
 	}
 
 	public Receiver getReceiver() {
@@ -61,6 +55,21 @@ public class Invoice {
 		return paymentType;
 	}
 	
+	@Override
+	public String toString() {
+		String str = "";
+		str+= number;
+		str+="\n";
+		str+= place;
+		str+="\n";
+		str+= date;
+		str+="\n";
+		str+= paymentType;
+		str+="\n#\n";
+		str+=receiver;
+		str+=content;
+		return str;
+	}
 	
 
 }
