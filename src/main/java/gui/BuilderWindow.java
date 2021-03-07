@@ -30,6 +30,7 @@ import Models.DateLabelFormatter;
 import Models.Invoice;
 import Models.Item;
 import Models.Receiver;
+import services.FileUsageService;
 
 public class BuilderWindow extends JFrame {
 	
@@ -333,6 +334,10 @@ public class BuilderWindow extends JFrame {
 				System.out.println("vat "+ prozent +"% summary : " + content.getVatSummary());
 		
 				System.out.println("overall sum : " + content.getSummaryWithVat());
+				
+				FileUsageService fr = new FileUsageService();
+				
+				fr.createDocumnet(invoice.getNumber(), invoice.toString());
 				
 				
 				win.repaint();

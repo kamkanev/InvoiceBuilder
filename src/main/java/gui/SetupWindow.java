@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 import Models.Consts.Info;
-import services.IFileUsage;
+import services.interfaces.IFileUsage;
 
 public class SetupWindow extends JFrame implements IFileUsage{
 	
@@ -151,7 +151,7 @@ public class SetupWindow extends JFrame implements IFileUsage{
 					JOptionPane.showMessageDialog(win, "Choose a directory", "Error", JOptionPane.ERROR_MESSAGE);
 					//System.exit(-1);
 				}else {
-					createDocumnet("info");
+					createDocumnet("info", "");
 					win.repaint();
 					win.dispose();
 					BuilderWindow inWin = new BuilderWindow();
@@ -234,7 +234,7 @@ public class SetupWindow extends JFrame implements IFileUsage{
 	}
 
 	@Override
-	public void createDocumnet(String name) {
+	public void createDocumnet(String name, String data) {
 		
 		File infoDir = new File(Info.getResDirectory()+"/.info");
 		
@@ -258,7 +258,7 @@ public class SetupWindow extends JFrame implements IFileUsage{
 	}
 
 	@Override
-	public void updateDocument(String name) {
+	public void updateDocument(String name, String data) {
 		// TODO Auto-generated method stub
 		
 	}
